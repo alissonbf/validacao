@@ -16,8 +16,8 @@
 
 
 ?>
-
-<div id="navegacao">
+<link rel="stylesheet" href="<?php echo $CFG->wwwroot.'/blocks/validacao/css/styles.css'; ?>" type="text/css" />
+<div id="menu">
     <ul>
         <li><a href="<?php echo $CFG->wwwroot.'/blocks/validacao/solicitacoes_pendentes.php'; ?>"> Socitações pendentes</a></li>
         <li><a href="<?php echo $CFG->wwwroot.'/blocks/validacao/solicitacoes_avaliadas.php'; ?>"> Solicitações avaliadas</a></li>

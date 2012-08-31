@@ -59,28 +59,39 @@
 <div id="listagem">
 
     <?php foreach ($solicitacoes as $solicitacao):
-
-            $aluno                  = $DB->get_record_select('user','username='."'$solicitacao->aluno_cpf'");
-            if(!empty($aluno->id)){
+        
+            $user_info_data             = $DB->get_record_select('user_info_data','data='."'$solicitacao->aluno_cpf'");
+            if(!empty($user_info_data->data)){
+                $aluno                  = $DB->get_record_select('user','id='."'$user_info_data->userid'");
                 $certificado_valido     = $DB->get_record_select('certificate_issues'   ,'userid='.$aluno->id.' AND '.' BINARY '.'code='."'{$solicitacao->aluno_numero_certificado}'");
-
+                
                 if(!empty($certificado_valido->certificateid)){
                     $certificate            = $DB->get_record_select('certificate'          ,'id='.$certificado_valido->certificateid);
                     $course                 = $DB->get_record_select('course'               ,'id='.$certificate->course);
                     $category               = $DB->get_record_select('course_categories'    ,'id='.$course->category);
+                    
+                    $id_ddd_celular         = $DB->get_record_select('user_info_field'      ,"shortname='DDDCelular'");
+                    $id_celular             = $DB->get_record_select('user_info_field'      ,"shortname='cel'");
+                    
+                    $ddd                    = $DB->get_record_select('user_info_data'       ,'fieldid='.$id_ddd_celular->id.' AND '.' userid='.$aluno->id);
+                    $celular                = $DB->get_record_select('user_info_data'       ,'fieldid='.$id_celular->id.' AND '.' userid='.$aluno->id);
                 } else {
-                    $course                 = '';
-                    $category               = '';
-                    $certificate            = '';
-                    $certificado_valido     = '';
+                    $course                 = new stdClass();
+                    $category               = new stdClass();
+                    $certificate            = new stdClass();
+                    $certificado_valido     = new stdClass();
+                    $ddd                    = new stdClass();
+                    $celular                = new stdClass();
                 }
 
             } else {
-                $course                 = '';
-                $category               = '';
-                $certificate            = '';
-                $certificado_valido     = '';
-                $aluno                  = '';
+                $course                 = new stdClass();
+                $category               = new stdClass();
+                $certificate            = new stdClass();
+                $certificado_valido     = new stdClass();
+                $aluno                  = new stdClass();
+                $ddd                    = new stdClass();
+                $celular                = new stdClass();
             }
 
                 /*
@@ -91,6 +102,10 @@
                  # Condições ternarias
                  $aluno->username   = isset($aluno->username) ? $aluno->username.' - '.VALIDO : INVALIDO;
                  $aluno->firstname  = isset($aluno->firstname) ? $aluno->firstname :'';
+                 
+                 $ddd->data         = isset($ddd->data) ? $ddd->data :'';
+                 $celular->data     = isset($celular->data) ? $celular->data :'';
+                 
                  if($aluno->username == INVALIDO){
                     $aluno->firstname = '';
                     $aluno->email ='';
@@ -109,7 +124,18 @@
                 $course->shortname ='';
                     $category->name ='';
                     $certificate->printhours ='' ;
-                    $certificado_valido->certdate = "43234323432";
+                    $certificado_valido->timecreated = "43234323432";
+                }
+
+                /**
+                 * Pega o nome do país do aluno
+                 */
+
+                $countries = get_string_manager()->get_list_of_countries(false);
+                if (isset($countries[$aluno->country])) {
+                    $country = $countries[$aluno->country];
+                } else {
+                    $country = '';
                 }
             ?>
 
@@ -142,19 +168,18 @@
             <tr>
                 <td style=" border-right: 1px solid #ddd;"><?php echo 'Instituição: <b> '.$solicitacao->solicitante_instituicao ?></td>
                  <td style=" border-right: 1px solid #ddd;"><?php echo 'E-mail: <b>'.$aluno->email   ?></td>
-                 <td> <?php 'Categoria / subcategoria <b>'. $category->name  .'</b>'; ?></td>
+                 <td> <?php echo 'Categoria: <b>'. $category->name  .'</b>'; ?></td>
             </tr>
             <tr>
                 <td style=" border-right: 1px solid #ddd;"><?php echo 'Telefone: <b> '.$solicitacao->solicitante_telefone      ?></td>
-                 <td style=" border-right: 1px solid #ddd;"><?php echo 'Telefone: <b>'.$aluno->phone1 ?></td>
-                 <td> <?php echo 'Carga Horária <b>'. $certificate->printhours .' horas </b>' ?></td>
+                 <td style=" border-right: 1px solid #ddd;"><?php echo 'Telefone: <b> ('.$ddd->data.') '. $celular->data ?></td>
+                 <td> <?php echo 'Carga Horária: <b>'. $certificate->printhours .' horas </b>' ?></td>
 
             </tr>
             <tr>
                 <td style=" border-right: 1px solid #ddd;"><?php echo 'E-mail: <b> '.$solicitacao->solicitante_email ?></td>
-                <td style=" border-right: 1px solid #ddd;"><?php echo 'Endereço: <b>'.$aluno->address.' , '.$aluno->city.' - '.$aluno->country      ?></td>
-                <td> <?php echo 'Data de emissão do certificado <b>'. date("d/m/Y", $certificado_valido->certdate) .'</b> '; ?></td>
-
+                <td style=" border-right: 1px solid #ddd;"><?php echo 'Cidade/País: <b>'.$aluno->city.' - '.$country      ?></td>
+                <td> <?php echo 'Data de emissão do certificado: <b>'. date("d/m/Y", $certificado_valido->timecreated) .'</b> '; ?></td>
             </tr>
 
             <tr style="background: #fafafa; border: 1px solid #ddd; margin-bottom: 10px;">

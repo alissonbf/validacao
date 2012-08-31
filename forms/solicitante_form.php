@@ -19,34 +19,35 @@
             $mform->addElement('header', 'displayinfo', 'Dados do solicitante');
 
                 
-                $mform->addElement('text','solicitante_nome','Nome');
+                $mform->addElement('text','solicitante_nome','Nome Completo', array('size'=>'50'));
                 $mform->addRule('solicitante_nome', null, 'required', null, 'client');
-
+                
                    
-                $mform->addElement('text','solicitante_instituicao','Instituição');
+                $mform->addElement('text','solicitante_instituicao','Instituição', array('size'=>'50'));
                 $mform->addRule('solicitante_instituicao', null, 'required', null, 'client');
 
 
-                $mform->addElement('text','solicitante_setor','Setor');
+                $mform->addElement('text','solicitante_setor','Setor', array('size'=>'50'));
                 $mform->addRule('solicitante_setor', null, 'required', null, 'client');
                 
                 
-                $mform->addElement('text','solicitante_telefone','Telefone');
+                $mform->addElement('text','solicitante_telefone','Telefone', array('onkeypress'=>'mascara(this,telefone)', 'maxlength'=>'14'));
                 $mform->addRule('solicitante_telefone', null, 'required', null, 'client');
 
                 
-                $mform->addElement('text','solicitante_email','E-mail');
+                $mform->addElement('text','solicitante_email','E-mail', array('size'=>'50'));
                 $mform->addRule('solicitante_email', null, 'required', null, 'client');
 
                 // add group for text areas
                 $mform->addElement('header', 'displayinfo', 'Dados do aluno');
        
                 // add dados do aluno
-                $mform->addElement('text','aluno_cpf','CPF do aluno');
+                $mform->addElement('text','aluno_cpf','CPF do aluno', array('size'=>'50'));
                 $mform->addRule('aluno_cpf', null, 'required', null, 'client');
+                $mform->addElement('static', 'automatico', '', 'Apenas números.');
 
                 // add dados do aluno
-                $mform->addElement('text','aluno_numero_certificado','Cód. do certificado');
+                $mform->addElement('text','aluno_numero_certificado','Cód. do certificado', array('size'=>'50'));
                 $mform->addRule('aluno_numero_certificado', null, 'required', null, 'client');
                 $mform->addElement('static', 'automatico', '', 'Respeite as letras maiusculas e minusculas.');
 

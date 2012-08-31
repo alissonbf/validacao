@@ -20,6 +20,7 @@
     $PAGE->set_context($systemcontext);
     $PAGE->set_url(new moodle_url($CFG->wwwroot.'/blocks/validacao/deferir_indeferir.php'));
     $PAGE->set_title('Visualizar solicitações pendentes');
+    $PAGE->set_heading('Visualizar solicitações pendentes');
     $PAGE->set_focuscontrol('');
     $PAGE->set_cacheable(true);
     $PAGE->navbar->add('Validação de certificados', new moodle_url($CFG->wwwroot.'/blocks/validacao/index.php'), null, navigation_node::TYPE_CUSTOM, new moodle_url($CFG->wwwroot));
@@ -35,6 +36,16 @@
         
         if($_POST['confirmacao'] == 'Sim'){
             
+            if ($_POST['status'] == 'Excluir'){
+                /* Altera o status da solicitação e da validação  */
+                $DB->set_field('block_validacao_solicitacao','status_da_solicitacao','excluida',array('id' => $_POST['id']));
+                $DB->set_field('block_validacao_solicitacao','status_da_validacao'  ,'excluida',array('id' => $_POST['id']));
+                /* Fim altera o status da solicitação e da validação  */
+                
+                echo '<script>alert("Solicitação excluida com sucesso!")</script>';
+                echo   '<meta http-equiv="refresh" content="0; url=solicitacoes_pendentes.php">';                        
+            }
+            
             if ($_POST['status'] == 'Deferir'){
 
                 /* Altera o status da solicitação e da validação  */
@@ -44,7 +55,7 @@
 
 
                 /* Verifica se o envio de email automatico esta ativado */
-                $configuracao    = $DB->get_record_select('block_validacao_configuracao',null);
+                $configuracao    = $DB->get_record_select('block_validacao_configuracao',null);                
                 if($configuracao->email_automatico == 1){
                     
                     /* Monta a mensagem e envia por email */
@@ -65,11 +76,10 @@
                     echo   '<meta http-equiv="refresh" content="0; url=solicitacoes_pendentes.php">';
                 }
                 /* Fim verifica se o envio de email automatico esta ativado */
-
-
-                
-                
-            } else {
+            }
+            
+            
+            if ($_POST['status'] == 'Indeferir'){
                 /* Altera o status da solicitação e da validação  */
                 $DB->set_field('block_validacao_solicitacao','status_da_solicitacao','avaliada'  ,array('id' => $_POST['id']));
                 $DB->set_field('block_validacao_solicitacao','status_da_validacao'  ,'indeferida',array('id' => $_POST['id']));
@@ -135,6 +145,9 @@
         <input type="submit" value="Sim" name="confirmacao">
         <input type="submit" value="Cancelar" name="confirmacao">
     </form>
+
+    
+
 </div>
 <?php
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/validacao/db" VERSION="20120612" COMMENT="XMLDB file for Moodle blocks/validacao"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_validacao_solicitacao" COMMENT="Dados das solicitacoes de validacao de certificado" NEXT="block_validacao_configuracao">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="solicitante_nome"/>
+        <FIELD NAME="solicitante_nome" TYPE="char" LENGTH="80" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="solicitante_setor"/>
+        <FIELD NAME="solicitante_setor" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false" PREVIOUS="solicitante_nome" NEXT="solicitante_instituicao"/>
+        <FIELD NAME="solicitante_instituicao" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false" PREVIOUS="solicitante_setor" NEXT="solicitante_email"/>
+        <FIELD NAME="solicitante_email" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false" PREVIOUS="solicitante_instituicao" NEXT="aluno_cpf"/>
+        <FIELD NAME="aluno_cpf" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" PREVIOUS="solicitante_email" NEXT="aluno_numero_certificado"/>
+        <FIELD NAME="aluno_numero_certificado" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" PREVIOUS="aluno_cpf" NEXT="status_da_solicitacao"/>
+        <FIELD NAME="status_da_solicitacao" TYPE="char" LENGTH="50" NOTNULL="false" DEFAULT="pendente" SEQUENCE="false" PREVIOUS="aluno_numero_certificado" NEXT="status_da_validacao"/>
+        <FIELD NAME="status_da_validacao" TYPE="char" LENGTH="50" NOTNULL="false" DEFAULT="pendente" SEQUENCE="false" PREVIOUS="status_da_solicitacao" NEXT="solicitante_telefone"/>
+        <FIELD NAME="solicitante_telefone" TYPE="char" LENGTH="15" NOTNULL="true" SEQUENCE="false" PREVIOUS="status_da_validacao" NEXT="data"/>
+        <FIELD NAME="data" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" PREVIOUS="solicitante_telefone"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_validacao_configuracao" COMMENT="Configuracao do plugin" PREVIOUS="block_validacao_solicitacao">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="empresa_nome"/>
+        <FIELD NAME="empresa_nome" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="email"/>
+        <FIELD NAME="email" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false" PREVIOUS="empresa_nome" NEXT="senha"/>
+        <FIELD NAME="senha" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false" PREVIOUS="email" NEXT="smtp_secure"/>
+        <FIELD NAME="smtp_secure" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="tls" SEQUENCE="false" PREVIOUS="senha" NEXT="charset"/>
+        <FIELD NAME="charset" TYPE="char" LENGTH="10" NOTNULL="true" DEFAULT="UTF-8" SEQUENCE="false" PREVIOUS="smtp_secure" NEXT="host"/>
+        <FIELD NAME="host" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" PREVIOUS="charset" NEXT="port"/>
+        <FIELD NAME="port" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" PREVIOUS="host" NEXT="mensagem_deferimento"/>
+        <FIELD NAME="mensagem_deferimento" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="port" NEXT="mensagem_indeferimento"/>
+        <FIELD NAME="mensagem_indeferimento" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="mensagem_deferimento" NEXT="email_automatico"/>
+        <FIELD NAME="email_automatico" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="mensagem_indeferimento"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

@@ -10,7 +10,7 @@
     /* initiate plugin */
     $("div.holder").jPages({
       containerID : "itemContainer",
-      perPage : 2
+      perPage : 5
     });
 
     /* on select change */
